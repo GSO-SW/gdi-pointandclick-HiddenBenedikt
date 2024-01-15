@@ -35,10 +35,14 @@ namespace gdi_PointAndClick
             Point mausposition = e.Location;
 
             Rectangle r = new Rectangle(mausposition.X - 15, mausposition.Y + 20, 40, 40);
+
+            //Länge und Breite des Rechtecks abfragen welches zu letzt in der Liste eingefügt wurde.
+            //Um dann anschließend den if zu erledigen
             if (!rectangles.Contains(r))
             {
                 rectangles.Add(r);
-            } 
+            }
+           
             // Kurze Variante: rectangles.Add( new Rectangle(...)  );
 
             Refresh();
