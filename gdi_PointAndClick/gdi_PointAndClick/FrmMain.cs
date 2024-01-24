@@ -16,15 +16,18 @@ namespace gdi_PointAndClick
         {
             // Hilfsvarablen
             Graphics g = e.Graphics;
-            int w = this.ClientSize.Width;
-            int h = this.ClientSize.Height;
+
+            Random farbengenerator= new Random();
 
             // Zeichenmittel
-            Brush b = new SolidBrush(Color.Black);
+  
 
 
             for (int i = 0; i < rectangles.Count; i++)
             {
+                Color farbe = Color.FromArgb(farbengenerator.Next(256), farbengenerator.Next(256), farbengenerator.Next(256));
+                Brush b = new SolidBrush(farbe);
+
                 g.FillRectangle(b, rectangles[i]);
             }
 
@@ -33,19 +36,37 @@ namespace gdi_PointAndClick
         private void FrmMain_MouseClick(object sender, MouseEventArgs e)
         {
             Point mausposition = e.Location;
+            bool contains = false;
 
-            Rectangle r = new Rectangle(mausposition.X - 15, mausposition.Y + 20, 40, 40);
+            Random groeßenGenerator = new Random();
+            int groeße = groeßenGenerator.Next(40, 120);
 
-            //Länge und Breite des Rechtecks abfragen welches zu letzt in der Liste eingefügt wurde.
-            //Um dann anschließend den if zu erledigen
-            if (!rectangles.Contains(r))
+            Rectangle r = new Rectangle(mausposition.X - groeße/2, mausposition.Y - groeße/2, groeße, groeße);
+
+            for (int i = 0; i < rectangles.Count; i++)
+            {
+                if (rectangles[i].Contains(mausposition))
+                {
+                    contains = true;
+
+                    if (e.Button == MouseButtons.Right)
+                    {
+                        rectangles.RemoveAt(i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+
+            }
+            if (contains == false)
             {
                 rectangles.Add(r);
             }
-           
-            // Kurze Variante: rectangles.Add( new Rectangle(...)  );
-
             Refresh();
+
         }
 
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
